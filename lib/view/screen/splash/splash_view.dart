@@ -1,10 +1,13 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pingolearn/routes/app_routes.dart';
 import 'package:pingolearn/utils/colors.dart';
+import 'package:pingolearn/view/screen/authentication/register/signup_viewmodel.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class SplashScreenView extends StatefulWidget {
@@ -19,10 +22,22 @@ class _SplashScreenViewState extends State<SplashScreenView> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 5), () {
-      context.goNamed(AppRoute.loginScreen.name);
+    checkLoginStatus();
+  }
+
+  checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? uid = prefs.getString('uid');
+    Future.delayed(const Duration(seconds: 2), () {
+      if (uid != null) {
+        context.read<SignUpViewModel>().fetchUserData(uid, context);
+        context.pushReplacementNamed(AppRoute.bottomScreen.name);
+      } else {
+        context.pushReplacementNamed(AppRoute.loginScreen.name);
+      }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return const Scaffold(

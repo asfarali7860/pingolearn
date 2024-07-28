@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -99,6 +101,7 @@ class _SignUpViewState extends State<SignUpView> {
                 gapH60,
                 CustomButton(
                   text: "Sign Up", 
+                  isBusy: context.watch<SignUpViewModel>().isLoading,
                   width: MediaQuery.of(context).size.width * 0.6,
                   onTap: () async {
                     if (_formKey.currentState!.validate()) {

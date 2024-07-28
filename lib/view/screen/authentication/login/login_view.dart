@@ -26,6 +26,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: backgroundColor,
       body: Form(
         key: _formKey,
@@ -83,6 +84,7 @@ class _LoginViewState extends State<LoginView> {
                 gapH60,
                 CustomButton(
                   text: "Login", 
+                  isBusy: context.watch<SignUpViewModel>().isLoading,
                   width: MediaQuery.of(context).size.width * 0.6,
                   onTap: () async {
                     await context.read<SignUpViewModel>().signInWithEmail(_emailController.text, _passwordController.text, context);

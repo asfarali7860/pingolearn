@@ -10,12 +10,12 @@ class HomeScreenViewModel extends ChangeNotifier {
   final Dio dio = Dio();
   bool isLoading = false;
 
-  Future<void> fetchNewsData() async {
+  Future<void> fetchNewsData(String code) async {
     isLoading = true;
     notifyListeners();
     try {
       Response response = await dio.get(
-        "https://newsapi.org/v2/top-headlines?country=in&pageSize=100&apiKey=7c51cd1cd9624a8f97fbd2612b7ee5a0",
+        "https://newsapi.org/v2/top-headlines?country=$code&pageSize=100&apiKey=7c51cd1cd9624a8f97fbd2612b7ee5a0",
       );
       newsResponseModel = NewsResponseModel.fromJson(response.data);
       log(newsResponseModel.toString());
