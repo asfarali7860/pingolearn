@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pingolearn/utils/app_sizes.dart';
 import 'package:pingolearn/utils/colors.dart';
+import 'package:pingolearn/view/screen/home/homescreen_viewmodel.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreenView extends StatefulWidget {
   const HomeScreenView({super.key});
@@ -13,8 +13,18 @@ class HomeScreenView extends StatefulWidget {
 }
 
 class _HomeScreenViewState extends State<HomeScreenView> {
+  late HomeScreenViewModel _viewModel;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _viewModel = context.read<HomeScreenViewModel>();
+      _viewModel.fetchNewsData();
+    });
+  }
   @override
   Widget build(BuildContext context) {
+    _viewModel = context.watch<HomeScreenViewModel>();
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -49,7 +59,11 @@ class _HomeScreenViewState extends State<HomeScreenView> {
           )
         ],
       ),
-      body: Padding(
+      body: _viewModel.isLoading ?
+      const Center(
+        child: CircularProgressIndicator(),
+      )
+      : Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,7 +79,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
             gapH16,
             Expanded(
               child: ListView.separated(
-                itemCount: 6,
+                itemCount: _viewModel.articleList.length,
                 itemBuilder: (context, index) {
                   return Container(
                     decoration: BoxDecoration(
@@ -87,7 +101,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "News Source",
+                                  _viewModel.articleList[index].source?.name ?? '',
                                   style: GoogleFonts.poppins(
                                     fontSize: 14,
                                     color: kBlack,
@@ -96,7 +110,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                 ),
                                 gapH8,
                                 Text(
-                                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vel sapien tellus. Ut mnasdbfa ajhdgfoadj ajidbcoaidlck jidkhacoiadhc ajdhcoiadkc ajdchbnoiadjn ajbdcoakdlcnj ",
+                                   _viewModel.articleList[index].title ?? '',
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 3,
                                   style: GoogleFonts.poppins(

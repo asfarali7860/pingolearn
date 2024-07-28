@@ -31,7 +31,7 @@ class CommonTextField extends StatefulWidget {
     this.isCapital = false,
     required this.controller,
     this.isValidating = false,
-    Key? key,
+    super.key,
     this.validator,
     this.padding = const EdgeInsets.only(
       left: AppSizes.p14,
@@ -45,13 +45,13 @@ class CommonTextField extends StatefulWidget {
     this.obsecureText = false,
     this.onChange,
     this.isPassword = false,
-  }) : super(key: key);
+  });
 
   @override
-  _CommonTextFieldState createState() => _CommonTextFieldState();
+  CommonTextFieldState createState() => CommonTextFieldState();
 }
 
-class _CommonTextFieldState extends State<CommonTextField> {
+class CommonTextFieldState extends State<CommonTextField> {
   bool _obscureText = false;
 
   @override
