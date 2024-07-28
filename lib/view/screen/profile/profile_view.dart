@@ -95,9 +95,49 @@ class _ProfileScreenViewState extends State<ProfileScreenView> {
                   return InkWell(
                     onTap: () async {
                       if(index == 4){
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
-                        await prefs.remove('uid');
-                        context.read<SignUpViewModel>().signOut(context);
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              shape:
+                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                              backgroundColor: kWhite,
+                              title: const Text(
+                                "Logout",
+                                style: TextStyle(
+                                    color: primaryColor,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,),
+                              ),
+                              content: const Text(
+                                "Are you sure you want Logout? ",
+                                style: TextStyle(color: primaryColor),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text(
+                                    "No",
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: ()async {
+                                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                                    await prefs.remove('uid');
+                                    context.read<SignUpViewModel>().signOut(context);
+                                  },  
+                                  child: const Text(
+                                    "Yes",
+                                    style: TextStyle(color: primaryColor),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       }
                     },
                     child: Container(
